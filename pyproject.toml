@@ -1,0 +1,127 @@
+[project]
+name = "dot-profiles"
+version = "0.1.0"
+description = "Save, apply, export and import desktop dotfile profiles from the command line."
+keywords = ["dotfiles", "profiles", "backup", "kde", "plasma", "linux"]
+readme = "README.md"
+authors = [{ name = "arpan", email = "me@arpanrec.com" }]
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.13.5",
+    "pyyaml>=6.0.3",
+    "typer>=0.27.2",
+]
+classifiers = [
+    "Operating System :: POSIX :: Linux",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Systems Administration",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/arpanrec/dot-profiles"
+Issues = "https://github.com/arpanrec/dot-profiles/issues"
+Repository = "https://github.com/arpanrec/dot-profiles"
+
+[project.scripts]
+dpf = "dot_profiles.__main__:main"
+
+[dependency-groups]
+dev = [
+    "yamllint==1.38.0",
+    "black==26.5.1",
+    "isort==9.0.1",
+    "mypy==2.3.1",
+    "pylint==4.0.9",
+    "pyright==1.1.414",
+    "ruff==0.16.9",
+    "types-PyYAML==6.0.12.20260906",
+]
+
+[build-system]
+build-backend = "uv_build"
+requires = ["uv_build>=0.12.8,<1.0"]
+
+[tool.uv]
+link-mode = "clone"
+package = true
+required-version = ">=0.12.8,<1.0"
+system-certs = true
+
+[[tool.uv.index]]
+name = "test-pypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[[tool.uv.index]]
+default = true
+name = "pypi"
+url = "https://pypi.org/simple/"
+publish-url = "https://upload.pypi.org/legacy/"
+
+[tool.black]
+line-length = 120
+target-version = ["py314"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP", "SIM", "C4"]
+
+[tool.mypy]
+python_version = "3.14"
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+exclude = ["^.venv/.*"]
+
+[tool.pyright]
+include = ["src"]
+pythonVersion = "3.14"
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "strict"
+
+[tool.pylint.main]
+py-version = "3.14"
+jobs = 0
+ignore-paths = ["^\\.venv/.*"]
+ignore = [".venv"]
+good-names = ["i", "j", "k", "v", "ex", "_", "pk", "x", "y"]
+
+[tool.pylint.format]
+max-line-length = 120
+indent-string = "    "
+
+[tool.pylint.design]
+max-args = 8
+max-positional-arguments = 8
+max-locals = 20
+max-returns = 8
+
+[tool.pylint."messages control"]
+disable = [
+    "duplicate-code",
+    "W0511",
+    "broad-exception-caught",
+    "too-many-branches",
+]

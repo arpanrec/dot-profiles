@@ -1,0 +1,209 @@
+---
+name: "Lint"
+
+"on":
+    workflow_dispatch:
+    pull_request:
+    push:
+
+env:
+    UV_LOCKED: "true"
+    UV_MANAGED_PYTHON: "true"
+
+jobs:
+    mypy:
+        name: mypy
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Install dependencies
+              run: uv sync --all-extras --all-packages --no-progress
+
+            - name: Running mypy
+              run: uv --offline run --no-sync --no-progress mypy $(git ls-files '*.py')
+
+    pylint:
+        name: pylint
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Install dependencies
+              run: uv sync --all-extras --all-packages --no-progress
+
+            - name: Running pylint
+              run: uv --offline run --no-sync --no-progress pylint $(git ls-files '*.py')
+
+    isort:
+        name: isort
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Install dependencies
+              run: uv sync --all-extras --all-packages --no-progress
+
+            - name: Running isort
+              run: uv --offline run --no-sync --no-progress isort --check-only $(git ls-files '*.py')
+
+    black:
+        name: black
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Install dependencies
+              run: uv sync --all-extras --all-packages --no-progress
+
+            - name: Running black
+              run: uv --offline run --no-sync --no-progress black --check $(git ls-files '*.py')
+
+    ruff:
+        name: ruff
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Install dependencies
+              run: uv sync --all-extras --all-packages --no-progress
+
+            - name: Running ruff
+              run: uv --offline run --no-sync --no-progress ruff check $(git ls-files '*.py')
+
+    pyright:
+        name: pyright
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Install dependencies
+              run: uv sync --all-extras --all-packages --no-progress
+
+            - name: Running pyright
+              run: uv --offline run --no-sync --no-progress pyright
+
+    yamllint:
+        name: yamllint
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Install dependencies
+              run: uv sync --all-extras --all-packages --no-progress
+
+            - name: Running yamllint
+              run: uv --offline run --no-sync --no-progress yamllint $(git ls-files '*.yaml' '*.yml' '.yamllint')
+
+    prettier:
+        name: prettier
+        runs-on: ubuntu-26.04
+        steps:
+            - name: Checkout
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Install uv with all available options
+              uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+              with:
+                  cache-dependency-glob: |
+                      **/*requirements*.txt
+                      **/*requirements*.in
+                      **/*constraints*.txt
+                      **/*constraints*.in
+                      **/pyproject.toml
+                      **/uv.lock
+                      **/*.py.lock
+
+            - name: Running prettier
+              run: npx --yes prettier --check .
