@@ -38,6 +38,7 @@ dev = [
     "pylint==4.0.9",
     "pyright==1.1.414",
     "ruff==0.16.9",
+    "types-PyYAML==6.0.12.20260906",
 ]
 
 [build-system]

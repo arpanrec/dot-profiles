@@ -13,7 +13,7 @@ from datetime import datetime
 from typing import Any
 from zipfile import ZipFile, is_zipfile
 
-import yaml  # type: ignore[import-untyped]
+import yaml
 
 from .consts import CONFIG_FILE, DOT_PROFILES_DIR, EXPORT_EXTENSION, HOME, PROFILES_DIR
 from .parse import TOKEN_SYMBOL, parse_functions, parse_keywords, tokens
