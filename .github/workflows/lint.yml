@@ -13,7 +13,7 @@ env:
 jobs:
     mypy:
         name: mypy
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -26,7 +26,7 @@ jobs:
 
     pylint:
         name: pylint
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -39,7 +39,7 @@ jobs:
 
     isort:
         name: isort
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -52,7 +52,7 @@ jobs:
 
     black:
         name: black
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -65,7 +65,7 @@ jobs:
 
     ruff:
         name: ruff
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -78,7 +78,7 @@ jobs:
 
     pyright:
         name: pyright
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -91,7 +91,7 @@ jobs:
 
     yamllint:
         name: yamllint
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -104,7 +104,7 @@ jobs:
 
     prettier:
         name: prettier
-        runs-on: any
+        runs-on: ubuntu-26.04
         steps:
             -   name: Checkout
                 uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
