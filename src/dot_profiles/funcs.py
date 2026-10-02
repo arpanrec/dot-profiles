@@ -14,7 +14,9 @@ from typing import Any
 from zipfile import ZipFile, is_zipfile
 
 import yaml
+from pydantic import ValidationError
 
+from .config import Config
 from .consts import CONFIG_FILE, DOT_PROFILES_DIR, EXPORT_EXTENSION, HOME, PROFILES_DIR
 from .parse import TOKEN_SYMBOL, parse_functions, parse_keywords, tokens
 
@@ -122,45 +124,24 @@ def copy_entry(source: str, dest: str) -> None:
             shutil.copy(source, dest)
 
 
-def section_entries(section: dict[str, Any]) -> tuple[str, list[str]]:
-    """Returns the location and the entries of a "conf.yaml" section.
-
-    Args:
-        section: one named section of "save" or "export"
-    """
-    location: str = section["location"]
-    entries: list[str] = section["entries"]
-    return location, entries
-
-
-def read_config(config_file: str) -> dict[str, Any]:
-    """Reads "conf.yaml" and parses it.
+def read_config(config_file: str) -> Config:
+    """Reads "conf.yaml", validates it and expands its placeholders.
 
     Args:
         config_file: path to the config file
+
+    Raises:
+        ValueError: if the file does not match the configuration schema
     """
     with open(config_file, encoding="utf-8") as text:
-        config: dict[str, Any] = yaml.safe_load(text.read())
+        raw: Any = yaml.safe_load(text.read())
+    try:
+        config = Config.model_validate({} if raw is None else raw)
+    except ValidationError as err:
+        raise ValueError(f"Invalid configuration file {config_file}:\n{err}") from err
     parse_keywords(tokens, TOKEN_SYMBOL, config)
     parse_functions(tokens, TOKEN_SYMBOL, config)
-
-    # in some cases conf.yaml may contain nothing in "entries". Yaml parses
-    # these as NoneType which are not iterable which throws an exception
-    # we can convert all None-Entries into empty lists recursively so they
-    # are simply skipped in loops later on
-    def convert_none_to_empty_list(data: Any) -> Any:
-        if data is None:
-            return []
-        if isinstance(data, list):
-            return [convert_none_to_empty_list(item) for item in data]  # pyright: ignore[reportUnknownVariableType]
-        if isinstance(data, dict):
-            return {  # pyright: ignore[reportUnknownVariableType]
-                key: convert_none_to_empty_list(value)
-                for key, value in data.items()  # pyright: ignore[reportUnknownVariableType]
-            }
-        return data
-
-    return convert_none_to_empty_list(config)
+    return config
 
 
 @exception_handler
@@ -203,14 +184,13 @@ def save_profile(name: str, profile_list: list[str], force: bool = False) -> Non
     profile_dir = os.path.join(PROFILES_DIR, name)
     mkdir(profile_dir)
 
-    config = read_config(CONFIG_FILE)["save"]
+    config = read_config(CONFIG_FILE).save
 
-    for section in config:
-        location, entries = section_entries(config[section])
+    for section, section_config in config.items():
         folder = os.path.join(profile_dir, section)
         mkdir(folder)
-        for entry in entries:
-            source = os.path.join(location, entry)
+        for entry in section_config.entries:
+            source = os.path.join(section_config.location, entry)
             dest = os.path.join(folder, entry)
             copy_entry(source, dest)
 
@@ -239,10 +219,10 @@ def apply_profile(profile_name: str, profile_list: list[str], profile_count: int
     log("copying files...")
 
     config_location = os.path.join(profile_dir, "conf.yaml")
-    profile_config = read_config(config_location)["save"]
-    for name in profile_config:
+    profile_config = read_config(config_location).save
+    for name, section_config in profile_config.items():
         location = os.path.join(profile_dir, name)
-        copy(location, profile_config[name]["location"])
+        copy(location, section_config.location)
 
     log("Profile applied successfully! Please log-out and log-in to see the changes completely!")
 
@@ -278,18 +258,16 @@ def stage_export(profile_dir: str, export_path: str) -> None:
     config = read_config(profile_config_file)
 
     export_path_save = mkdir(os.path.join(export_path, "save"))
-    for name in config["save"]:
+    for name in config.save:
         location = os.path.join(profile_dir, name)
         log(f'Exporting "{name}"...')
         copy(location, os.path.join(export_path_save, name))
 
-    config_export = config["export"]
     export_path_export = mkdir(os.path.join(export_path, "export"))
-    for name in config_export:
-        location, entries = section_entries(config_export[name])
+    for name, section_config in config.export.items():
         path = mkdir(os.path.join(export_path_export, name))
-        for entry in entries:
-            source = os.path.join(location, entry)
+        for entry in section_config.entries:
+            source = os.path.join(section_config.location, entry)
             dest = os.path.join(path, entry)
             log(f'Exporting "{entry}"...')
             copy_entry(source, dest)
@@ -385,13 +363,12 @@ def import_profile(path: str) -> None:
     copy(os.path.join(temp_path, "save"), profile_dir)
     shutil.copy(os.path.join(temp_path, "conf.yaml"), profile_dir)
 
-    for section in config["export"]:
-        location, entries = section_entries(config["export"][section])
+    for section, section_config in config.export.items():
         path = os.path.join(temp_path, "export", section)
         mkdir(path)
-        for entry in entries:
+        for entry in section_config.entries:
             source = os.path.join(path, entry)
-            dest = os.path.join(location, entry)
+            dest = os.path.join(section_config.location, entry)
             log(f'Importing "{entry}"...')
             copy_entry(source, dest)
 

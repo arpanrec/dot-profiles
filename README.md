@@ -20,7 +20,7 @@ Every action is a subcommand of `dpf`. Run `dpf -h` for the command list and `dp
 ## Editing the configuration file
 
 You can make changes to the configuration file according to your needs. The configuration file is located in `~/.config/dot-profiles/conf.yaml`.
-On first run, dot-profiles writes a KDE Plasma configuration when `$XDG_CURRENT_DESKTOP` is `KDE`, and a minimal generic one otherwise.
+On first run, dot-profiles writes a KDE Plasma configuration when `$XDG_CURRENT_DESKTOP` is `KDE`, and a minimal generic one otherwise. dot-profiles validates the file whenever it reads it and reports the invalid key, so a misspelled key or an entry without a `location` stops the command with an error.
 
 ### Format
 

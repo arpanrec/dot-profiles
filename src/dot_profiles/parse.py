@@ -9,6 +9,7 @@ import re
 from collections.abc import Callable
 from typing import Any
 
+from .config import Config
 from .consts import BIN_DIR, CONFIG_DIR, DOT_PROFILES_DIR, HOME, PROFILES_DIR, SHARE_DIR
 
 
@@ -55,40 +56,39 @@ def begins_with(grouped_regex: str, path: str) -> str:
     return _find_directory(grouped_regex, path, str.startswith)
 
 
-def parse_keywords(tokens_: dict[str, Any], token_symbol: str, parsed: dict[str, Any]) -> None:
+def parse_keywords(tokens_: dict[str, Any], token_symbol: str, parsed: Config) -> None:
     """Replaces keywords with values in conf.yaml. For example, it will replace, $HOME with
     /home/username/
 
     Args:
         tokens_: the token dictionary
         token_symbol: TOKEN_SYMBOL
-        parsed: the parsed conf.yaml file
+        parsed: the validated conf.yaml file
     """
-    for item in parsed:
-        for name in parsed[item]:
+    for section in parsed.sections():
+        for entry in section.values():
             for key, value in tokens_["keywords"]["dict"].items():
                 word = token_symbol + key
-                location = parsed[item][name]["location"]
-                if word in location:
-                    parsed[item][name]["location"] = location.replace(word, value)
+                if word in entry.location:
+                    entry.location = entry.location.replace(word, value)
 
 
-def parse_functions(tokens_: dict[str, Any], token_symbol: str, parsed: dict[str, Any]) -> None:
+def parse_functions(tokens_: dict[str, Any], token_symbol: str, parsed: Config) -> None:
     """Replaces functions with values in conf.yaml. For example, it will replace,
     ${ENDS_WITH='text'} with a folder whose name ends with "text"
 
     Args:
         tokens_: the token dictionary
         token_symbol: TOKEN_SYMBOL
-        parsed: the parsed conf.yaml file
+        parsed: the validated conf.yaml file
     """
     functions = tokens_["functions"]
     raw_regex = f"\\{token_symbol}{functions['raw_regex']}"
     grouped_regex = f"\\{token_symbol}{functions['grouped_regex']}"
 
-    for item in parsed:
-        for name in parsed[item]:
-            location = parsed[item][name]["location"]
+    for section in parsed.sections():
+        for entry in section.values():
+            location = entry.location
             occurences = re.findall(raw_regex, location)
             if not occurences:
                 continue
@@ -98,7 +98,7 @@ def parse_functions(tokens_: dict[str, Any], token_symbol: str, parsed: dict[str
                     continue
                 func = found.group(1)
                 if func in functions["dict"]:
-                    parsed[item][name]["location"] = functions["dict"][func](grouped_regex, location)
+                    entry.location = functions["dict"][func](grouped_regex, location)
 
 
 TOKEN_SYMBOL = "$"
