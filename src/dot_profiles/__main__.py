@@ -7,9 +7,9 @@ from typing import Annotated
 
 import typer
 
-from .consts import CONFIG_FILE, VERSION, length_of_lop, list_of_profiles
-from .default_configs import CONF_KDE, CONF_OTHER
-from .funcs import (
+from dot_profiles.consts import CONFIG_FILE, VERSION, length_of_lop, list_of_profiles
+from dot_profiles.default_configs import CONF_KDE, CONF_OTHER
+from dot_profiles.funcs import (
     apply_profile,
     export,
     import_profile,
@@ -44,16 +44,16 @@ def _show_version(value: bool) -> None:
 
 @app.callback()
 def init(
-        version: Annotated[
-            bool,
-            typer.Option(
-                "--version",
-                "-v",
-                help="Display the current version of dot-profiles",
-                callback=_show_version,
-                is_eager=True,
-            ),
-        ] = False,
+    version: Annotated[
+        bool,
+        typer.Option(
+            "--version",
+            "-v",
+            help="Display the current version of dot-profiles",
+            callback=_show_version,
+            is_eager=True,
+        ),
+    ] = False,
 ) -> None:
     """Writes the default configuration file on first run."""
     del version
@@ -71,9 +71,8 @@ def list_command() -> None:
 
 @app.command("save")
 def save_command(
-        name: ProfileName,
-        force: Annotated[
-            bool, typer.Option("--force", "-f", help="Overwrite the profile if it already exists")] = False,
+    name: ProfileName,
+    force: Annotated[bool, typer.Option("--force", "-f", help="Overwrite the profile if it already exists")] = False,
 ) -> None:
     """Save the current configuration as a profile."""
     save_profile(name, list_of_profiles, force=force)
@@ -99,18 +98,16 @@ def wipe_command() -> None:
 
 @app.command("export")
 def export_command(
-        name: ProfileName,
-        directory: Annotated[
-            str | None,
-            typer.Option("--directory", "-d", metavar="<directory>",
-                         help="Directory for the archive (default: current)"),
-        ] = None,
-        archive_name: Annotated[
-            str | None,
-            typer.Option("--name", "-n", metavar="<archive-name>", help="Filename for the exported archive"),
-        ] = None,
-        force: Annotated[
-            bool, typer.Option("--force", "-f", help="Overwrite the archive if it already exists")] = False,
+    name: ProfileName,
+    directory: Annotated[
+        str | None,
+        typer.Option("--directory", "-d", metavar="<directory>", help="Directory for the archive (default: current)"),
+    ] = None,
+    archive_name: Annotated[
+        str | None,
+        typer.Option("--name", "-n", metavar="<archive-name>", help="Filename for the exported archive"),
+    ] = None,
+    force: Annotated[bool, typer.Option("--force", "-f", help="Overwrite the archive if it already exists")] = False,
 ) -> None:
     """Export a profile as a shareable .dpf archive file."""
     export(name, list_of_profiles, length_of_lop, directory, archive_name, force)
@@ -118,7 +115,7 @@ def export_command(
 
 @app.command("import")
 def import_command(
-        path: Annotated[str, typer.Argument(help="Path to the .dpf archive file")],
+    path: Annotated[str, typer.Argument(help="Path to the .dpf archive file")],
 ) -> None:
     """Import a profile from a .dpf archive file."""
     import_profile(path)

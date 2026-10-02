@@ -10,6 +10,7 @@ Dependency management and builds use `uv` (backend `uv_build`, Python >=3.12, `s
 uv sync                  # install deps + dev tools into .venv
 uv run dpf -h            # run the CLI
 uv build                 # build sdist and wheel
+uv run typer src/dot_profiles/__main__.py utils docs --output docs/cli.md  # regenerate docs/cli.md
 ```
 
 CI (`.github/workflows/lint.yml`) runs mypy, pylint, isort, black, ruff, pyright, yamllint and prettier. Line length is 120; mypy/pyright are strict, so all code needs full type hints.
@@ -18,7 +19,7 @@ CI (`.github/workflows/lint.yml`) runs mypy, pylint, isort, black, ruff, pyright
 
 dot-profiles saves/applies desktop "profiles" (dotfile snapshots) from `~/.config/dot-profiles/`. All code is in `src/dot_profiles/`:
 
-- `__main__.py` — Typer CLI (`main()` is the `dpf` script entry point). Each action is a subcommand: `list`, `save`, `apply`, `remove`, `wipe`, `export`, `import`; `--version` is a top-level option. On first run the app callback writes `CONF_KDE` (if `$XDG_CURRENT_DESKTOP == KDE`) or `CONF_OTHER` from `default_configs.py` to `~/.config/dot-profiles/conf.yaml`, then dispatches to `funcs`.
+- `__main__.py` — Typer CLI (`main()` is the `dpf` script entry point). Each action is a subcommand: `list`, `save`, `apply`, `remove`, `wipe`, `export`, `import`; `--version` is a top-level option. On first run the app callback writes `CONF_KDE` (if `$XDG_CURRENT_DESKTOP == KDE`) or `CONF_OTHER` from `default_configs.py` to `~/.config/dot-profiles/conf.yaml`, then dispatches to `funcs`. It imports sibling modules by absolute name (`dot_profiles.funcs`) because the docs command loads this file by path, where relative imports fail.
 - `consts.py` — path constants and **import-time side effects**: creates `~/.config/dot-profiles/profiles` and snapshots `list_of_profiles` / `length_of_lop` once at import. These values are passed into `funcs` functions, so they go stale within a single process after a save/remove.
 - `funcs.py` — profile operations (save, apply, remove, export, import, wipe) plus `read_config`, which loads `conf.yaml` and runs it through the `parse` module. Public functions are wrapped with `@exception_handler`.
 - `parse.py` — expands placeholders in each entry's `location` in `conf.yaml`: keywords (`$HOME`, `$CONFIG_DIR`, `$SHARE_DIR`, `$BIN_DIR`, `$DOT_PROFILES_DIR`, `$PROFILES_DIR`) and functions (`${ENDS_WITH="x"}`, `${BEGINS_WITH="x"}`, which resolve a directory name by listing the parent directory). The token tables (`tokens`, `TOKEN_SYMBOL`) are imported by `funcs.py`.

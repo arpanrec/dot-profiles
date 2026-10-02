@@ -13,60 +13,7 @@ Install from PyPI using pipx
 
 ## Usage
 
-Every action is a subcommand of `dpf`.
-
-### Get help
-
-`dpf -h` or `dpf --help`  
-`dpf <command> -h` shows the options of one command.
-
-### Save current configuration as a profile
-
-`dpf save <profile name>`
-
-### Overwrite an already saved profile
-
-`dpf save <profile name> -f` or `dpf save <profile name> --force`
-
-### List all profiles
-
-`dpf list`
-
-### Remove a profile
-
-`dpf remove <profile name>`
-
-### Apply a profile
-
-`dpf apply <profile name>`  
-You may need to log out and log in to see all the changes.
-
-### Export a profile as a ".dpf" file to share it with your friends!
-
-`dpf export <profile name>`
-
-### Export a profile, setting the output dir and archive name
-
-`dpf export <profile name> -d <archive directory> -n <archive name>`
-or
-`dpf export <profile name> --directory <archive directory> --name <archive name>`
-
-### Export a profile, overwrite files if they already exist
-
-`dpf export <profile name> -f` or `dpf export <profile name> --force`  
-_note: without --force, the export will be appended with the date and time to ensure unique naming and no data is overwritten_
-
-### Import a ".dpf" file
-
-`dpf import <path to the file>`
-
-### Show current version
-
-`dpf -v` or `dpf --version`
-
-### Wipe all profiles
-
-`dpf wipe`
+Every action is a subcommand of `dpf`. Run `dpf -h` for the command list and `dpf <command> -h` for the options of one command. The full reference is in [docs/cli.md](docs/cli.md).
 
 ---
 
