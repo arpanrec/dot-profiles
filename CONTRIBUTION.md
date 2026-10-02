@@ -11,7 +11,7 @@ Please note we have a code of conduct, please follow it in all your interactions
    build.
 2. Update the README.md with details of changes to the interface.
 3. Write commit messages in the [Conventional Commits](https://www.conventionalcommits.org/) format. The release workflow derives the [SemVer](http://semver.org/) version and `CHANGELOG.md` from them, so neither is edited by hand.
-4. Run `make lint` and fix everything it reports. `make fmt` applies the automatic fixes.
+4. Make sure the lint workflow in `.github/workflows/lint.yml` passes. Install the tools with `uv sync` and run them through `uv run`.
 5. Create a pull request and wait for the response.
 
 ## Code Guidelines

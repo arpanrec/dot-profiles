@@ -4,21 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Dependency management and builds use `uv` (backend `uv_build`, Python >=3.12, `src/` layout). The `Makefile` wraps these: `make setup`, `make build`, `make lint` (every CI check), `make fmt`, or a single linter such as `make mypy`.
+Dependency management and builds use `uv` (backend `uv_build`, Python >=3.12, `src/` layout). There is no test suite.
 
 ```bash
-uv sync                      # install deps + dev tools into .venv
-uv run dot-profiles -h       # run the CLI
-uv run mypy $(git ls-files '*.py')
-uv run pylint $(git ls-files '*.py')
-uv run isort --check-only $(git ls-files '*.py')
-uv run black --check $(git ls-files '*.py')
-uv run ruff check $(git ls-files '*.py')
-uv run pyright
-npx --yes prettier --check .   # md/yaml/json/etc. (config: .prettierrc.mjs)
+uv sync                  # install deps + dev tools into .venv
+uv run dot-profiles -h   # run the CLI
+uv build                 # build sdist and wheel
 ```
 
-CI (`.github/workflows/lint.yml`) runs mypy, pylint, isort, black, ruff, pyright, yamllint and prettier. Line length is 120; mypy/pyright are strict, so all code needs full type hints. There is no test suite.
+CI (`.github/workflows/lint.yml`) runs mypy, pylint, isort, black, ruff, pyright, yamllint and prettier. Line length is 120; mypy/pyright are strict, so all code needs full type hints.
 
 ## Architecture
 
