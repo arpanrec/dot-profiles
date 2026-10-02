@@ -15,55 +15,55 @@ Install from PyPI using pipx
 
 ### Get Help
 
-`dot-profiles -h` or `dot-profiles --help`
+`dpf -h` or `dpf --help`
 
 ### Save current configuration as a profile
 
-`dot-profiles -s <profile name>` or `dot-profiles --save <profile name>`
+`dpf -s <profile name>` or `dpf --save <profile name>`
 
 ### Overwrite an already saved profile
 
-`dot-profiles -s <profile name> -f` or `dot-profiles -s <profile name> --force `
+`dpf -s <profile name> -f` or `dpf -s <profile name> --force `
 
 ### List all profiles
 
-`dot-profiles -l` or `dot-profiles --list`
+`dpf -l` or `dpf --list`
 
 ### Remove a profile
 
-`dot-profiles -r <profile name>` or `dot-profiles --remove <profile name>`
+`dpf -r <profile name>` or `dpf --remove <profile name>`
 
 ### Apply a profile
 
-`dot-profiles -a <profile name>` or `dot-profiles --apply <profile name>`
+`dpf -a <profile name>` or `dpf --apply <profile name>`
 You may need to log out and log in to see all the changes.
 
 ### Export a profile as a ".dpf" file to share it with your friends!
 
-`dot-profiles -e <profile name>` or `dot-profiles --export-profile <profile name>`
+`dpf -e <profile name>` or `dpf --export-profile <profile name>`
 
 ### Export a profile, setting the output dir and archive name
 
-`dot-profiles -e <profile name> -d <archive directory> -n <archive name>`
+`dpf -e <profile name> -d <archive directory> -n <archive name>`
 or
-`dot-profiles --export-profile <profile name> --archive-directory <archive directory> --export-name <export name>`
+`dpf --export-profile <profile name> --archive-directory <archive directory> --export-name <export name>`
 
 ### Export a profile, overwrite files if they already exist
 
-`dot-profiles -e <profile name> -f` or `dot-profiles --export-profile <profile name> --force`
+`dpf -e <profile name> -f` or `dpf --export-profile <profile name> --force`
 *note: without --force, the export will be appended with the date and time to ensure unique naming and no data is overwritten
 
 ### Import a ".dpf" file
 
-`dot-profiles -i <path to the file>` or `dot-profiles --import-profile <path to the file>`
+`dpf -i <path to the file>` or `dpf --import-profile <path to the file>`
 
 ### Show current version
 
-`dot-profiles -v` or `dot-profiles --version`
+`dpf -v` or `dpf --version`
 
 ### Wipe all profiles
 
-`dot-profiles -w` or `dot-profiles --wipe`
+`dpf -w` or `dpf --wipe`
 
 ---
 

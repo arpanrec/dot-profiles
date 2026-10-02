@@ -25,7 +25,7 @@ def _get_parser() -> argparse.ArgumentParser:
         argparse.ArgumentParser: Created parser.
     """
     parser = argparse.ArgumentParser(
-        prog="dot-profiles",
+        prog="dpf",
         description="A simple and powerful utility for managing your dotfiles.",
         epilog="Please report bugs at https://www.github.com/arpanrec/dot-profiles",
         formatter_class=argparse.RawDescriptionHelpFormatter,

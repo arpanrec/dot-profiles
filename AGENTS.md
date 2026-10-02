@@ -8,7 +8,7 @@ Dependency management and builds use `uv` (backend `uv_build`, Python >=3.12, `s
 
 ```bash
 uv sync                  # install deps + dev tools into .venv
-uv run dot-profiles -h   # run the CLI
+uv run dpf -h            # run the CLI
 uv build                 # build sdist and wheel
 ```
 
@@ -18,7 +18,7 @@ CI (`.github/workflows/lint.yml`) runs mypy, pylint, isort, black, ruff, pyright
 
 dot-profiles saves/applies desktop "profiles" (dotfile snapshots) from `~/.config/dot-profiles/`. All code is in `src/dot_profiles/`:
 
-- `__main__.py` — argparse CLI (`main()` is the `dot-profiles` script entry point). On first run it writes `CONF_KDE` (if `$XDG_CURRENT_DESKTOP == KDE`) or `CONF_OTHER` from `default_configs.py` to `~/.config/dot-profiles/conf.yaml`, then dispatches to `funcs`.
+- `__main__.py` — argparse CLI (`main()` is the `dpf` script entry point). On first run it writes `CONF_KDE` (if `$XDG_CURRENT_DESKTOP == KDE`) or `CONF_OTHER` from `default_configs.py` to `~/.config/dot-profiles/conf.yaml`, then dispatches to `funcs`.
 - `consts.py` — path constants and **import-time side effects**: creates `~/.config/dot-profiles/profiles` and snapshots `list_of_profiles` / `length_of_lop` once at import. These values are passed into `funcs` functions, so they go stale within a single process after a save/remove.
 - `funcs.py` — profile operations (save, apply, remove, export, import, wipe) plus `read_config`, which loads `conf.yaml` and runs it through the `parse` module. Public functions are wrapped with `@exception_handler`.
 - `parse.py` — expands placeholders in each entry's `location` in `conf.yaml`: keywords (`$HOME`, `$CONFIG_DIR`, `$SHARE_DIR`, `$BIN_DIR`, `$DOT_PROFILES_DIR`, `$PROFILES_DIR`) and functions (`${ENDS_WITH="x"}`, `${BEGINS_WITH="x"}`, which resolve a directory name by listing the parent directory). The token tables (`tokens`, `TOKEN_SYMBOL`) are imported by `funcs.py`.
