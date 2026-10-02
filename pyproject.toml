@@ -7,11 +7,10 @@ authors = [
     { name = "arpan", email = "me@arpanrec.com" },
     { name = "Prayag Jain", email = "prayagjain2@gmail.com" },
 ]
-license = { file = "LICENSE" }
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = ["pyyaml>=6.0.3"]
 classifiers = [
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Operating System :: POSIX",
     "Environment :: Console",
     "Intended Audience :: End Users/Desktop",
@@ -44,7 +43,7 @@ system-certs = true
 [[tool.uv.index]]
 default = true
 name = "pypi_remote"
-url = "http://10.8.33.190:5502/root/pypi/+simple/"
+url = "https://pypi.org/simple/"
 
 [tool.black]
 line-length = 120
