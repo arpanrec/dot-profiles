@@ -4,13 +4,11 @@ version = "0.1.0"
 description = "Save, apply, export and import desktop dotfile profiles from the command line."
 keywords = ["dotfiles", "profiles", "backup", "kde", "plasma", "linux"]
 readme = "README.md"
-authors = [
-    { name = "arpan", email = "me@arpanrec.com" },
-]
+authors = [{ name = "arpan", email = "me@arpanrec.com" }]
 license = "GPL-3.0-only"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
-dependencies = ["pyyaml>=6.0.3"]
+dependencies = ["pyyaml>=6.0.3", "typer>=0.27.2"]
 classifiers = [
     "Operating System :: POSIX :: Linux",
     "Environment :: Console",
@@ -116,4 +114,9 @@ max-locals = 20
 max-returns = 8
 
 [tool.pylint."messages control"]
-disable = ["duplicate-code", "W0511", "broad-exception-caught", "too-many-branches"]
+disable = [
+    "duplicate-code",
+    "W0511",
+    "broad-exception-caught",
+    "too-many-branches",
+]

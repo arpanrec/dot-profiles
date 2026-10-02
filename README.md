@@ -13,49 +13,52 @@ Install from PyPI using pipx
 
 ## Usage
 
-### Get Help
+Every action is a subcommand of `dpf`.
 
-`dpf -h` or `dpf --help`
+### Get help
+
+`dpf -h` or `dpf --help`  
+`dpf <command> -h` shows the options of one command.
 
 ### Save current configuration as a profile
 
-`dpf -s <profile name>` or `dpf --save <profile name>`
+`dpf save <profile name>`
 
 ### Overwrite an already saved profile
 
-`dpf -s <profile name> -f` or `dpf -s <profile name> --force `
+`dpf save <profile name> -f` or `dpf save <profile name> --force`
 
 ### List all profiles
 
-`dpf -l` or `dpf --list`
+`dpf list`
 
 ### Remove a profile
 
-`dpf -r <profile name>` or `dpf --remove <profile name>`
+`dpf remove <profile name>`
 
 ### Apply a profile
 
-`dpf -a <profile name>` or `dpf --apply <profile name>`
+`dpf apply <profile name>`  
 You may need to log out and log in to see all the changes.
 
 ### Export a profile as a ".dpf" file to share it with your friends!
 
-`dpf -e <profile name>` or `dpf --export-profile <profile name>`
+`dpf export <profile name>`
 
 ### Export a profile, setting the output dir and archive name
 
-`dpf -e <profile name> -d <archive directory> -n <archive name>`
+`dpf export <profile name> -d <archive directory> -n <archive name>`
 or
-`dpf --export-profile <profile name> --archive-directory <archive directory> --export-name <export name>`
+`dpf export <profile name> --directory <archive directory> --name <archive name>`
 
 ### Export a profile, overwrite files if they already exist
 
-`dpf -e <profile name> -f` or `dpf --export-profile <profile name> --force`
-*note: without --force, the export will be appended with the date and time to ensure unique naming and no data is overwritten
+`dpf export <profile name> -f` or `dpf export <profile name> --force`  
+_note: without --force, the export will be appended with the date and time to ensure unique naming and no data is overwritten_
 
 ### Import a ".dpf" file
 
-`dpf -i <path to the file>` or `dpf --import-profile <path to the file>`
+`dpf import <path to the file>`
 
 ### Show current version
 
@@ -63,7 +66,7 @@ or
 
 ### Wipe all profiles
 
-`dpf -w` or `dpf --wipe`
+`dpf wipe`
 
 ---
 
