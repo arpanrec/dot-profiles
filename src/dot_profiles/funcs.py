@@ -1,5 +1,5 @@
 """
-This module contains all the functions for konsave.
+This module contains all the functions for dot-profiles.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ from zipfile import ZipFile, is_zipfile
 
 import yaml  # type: ignore[import-untyped]
 
-from .consts import CONFIG_FILE, EXPORT_EXTENSION, HOME, KONSAVE_DIR, PROFILES_DIR
+from .consts import CONFIG_FILE, DOT_PROFILES_DIR, EXPORT_EXTENSION, HOME, PROFILES_DIR
 from .parse import TOKEN_SYMBOL, parse_functions, parse_keywords, tokens
 
 
@@ -35,14 +35,14 @@ def exception_handler[**P, R](func: Callable[P, R]) -> Callable[P, R | None]:
             function = func(*args, **kwargs)
         except Exception as err:  # pylint: disable=broad-exception-caught
             dateandtime = datetime.now().strftime("[%d/%m/%Y %H:%M:%S]")
-            log_file = os.path.join(HOME, ".cache/konsave_log.txt")
+            log_file = os.path.join(HOME, ".cache/dot-profiles.log")
 
             with open(log_file, "a", encoding="utf-8") as file:
                 file.write(dateandtime + "\n")
                 traceback.print_exc(file=file)
                 file.write("\n")
 
-            print(f"Konsave: {err}\nPlease check the log at {log_file} for more details.")
+            print(f"dot-profiles: {err}\nPlease check the log at {log_file} for more details.")
             return None
 
         return function
@@ -72,7 +72,7 @@ def log(msg: str, *args: Any, **kwargs: Any) -> None:
         *args: any arguments for the function print()
         **kwargs: any keyword arguments for the function print()
     """
-    print(f"Konsave: {msg}", *args, **kwargs)
+    print(f"dot-profiles: {msg}", *args, **kwargs)
 
 
 @exception_handler
@@ -80,8 +80,8 @@ def copy(source: str, dest: str) -> None:
     """
     This function was created because shutil.copytree gives error if the destination folder
     exists and the argument "dirs_exist_ok" was introduced only after python 3.8.
-    This restricts people with python 3.7 or less from using Konsave.
-    This function will let people with python 3.7 or less use Konsave without any issues.
+    This restricts people with python 3.7 or less from using dot-profiles.
+    This function will let people with python 3.7 or less use dot-profiles without any issues.
     It uses recursion to copy files and folders from "source" to "dest"
 
     Args:
@@ -133,16 +133,16 @@ def section_entries(section: dict[str, Any]) -> tuple[str, list[str]]:
     return location, entries
 
 
-def read_konsave_config(config_file: str) -> dict[str, Any]:
+def read_config(config_file: str) -> dict[str, Any]:
     """Reads "conf.yaml" and parses it.
 
     Args:
         config_file: path to the config file
     """
     with open(config_file, encoding="utf-8") as text:
-        konsave_config: dict[str, Any] = yaml.safe_load(text.read())
-    parse_keywords(tokens, TOKEN_SYMBOL, konsave_config)
-    parse_functions(tokens, TOKEN_SYMBOL, konsave_config)
+        config: dict[str, Any] = yaml.safe_load(text.read())
+    parse_keywords(tokens, TOKEN_SYMBOL, config)
+    parse_functions(tokens, TOKEN_SYMBOL, config)
 
     # in some cases conf.yaml may contain nothing in "entries". Yaml parses
     # these as NoneType which are not iterable which throws an exception
@@ -160,7 +160,7 @@ def read_konsave_config(config_file: str) -> dict[str, Any]:
             }
         return data
 
-    return convert_none_to_empty_list(konsave_config)
+    return convert_none_to_empty_list(config)
 
 
 @exception_handler
@@ -179,7 +179,7 @@ def list_profiles(profile_list: list[str], profile_count: int) -> None:
     profile_list.sort()
 
     # run
-    print("Konsave profiles:")
+    print("dot-profiles profiles:")
     print("ID\tNAME")
     for i, item in enumerate(profile_list):
         print(f"{i + 1}\t{item}")
@@ -187,7 +187,7 @@ def list_profiles(profile_list: list[str], profile_count: int) -> None:
 
 @exception_handler
 def save_profile(name: str, profile_list: list[str], force: bool = False) -> None:
-    """Saves necessary config files in ~/.config/konsave/profiles/<name>.
+    """Saves necessary config files in ~/.config/dot-profiles/profiles/<name>.
 
     Args:
         name: name of the profile
@@ -203,10 +203,10 @@ def save_profile(name: str, profile_list: list[str], force: bool = False) -> Non
     profile_dir = os.path.join(PROFILES_DIR, name)
     mkdir(profile_dir)
 
-    konsave_config = read_konsave_config(CONFIG_FILE)["save"]
+    config = read_config(CONFIG_FILE)["save"]
 
-    for section in konsave_config:
-        location, entries = section_entries(konsave_config[section])
+    for section in config:
+        location, entries = section_entries(config[section])
         folder = os.path.join(profile_dir, section)
         mkdir(folder)
         for entry in entries:
@@ -239,7 +239,7 @@ def apply_profile(profile_name: str, profile_list: list[str], profile_count: int
     log("copying files...")
 
     config_location = os.path.join(profile_dir, "conf.yaml")
-    profile_config = read_konsave_config(config_location)["save"]
+    profile_config = read_config(config_location)["save"]
     for name in profile_config:
         location = os.path.join(profile_dir, name)
         copy(location, profile_config[name]["location"])
@@ -275,18 +275,18 @@ def stage_export(profile_dir: str, export_path: str) -> None:
         export_path: the folder that is later archived
     """
     profile_config_file = os.path.join(profile_dir, "conf.yaml")
-    konsave_config = read_konsave_config(profile_config_file)
+    config = read_config(profile_config_file)
 
     export_path_save = mkdir(os.path.join(export_path, "save"))
-    for name in konsave_config["save"]:
+    for name in config["save"]:
         location = os.path.join(profile_dir, name)
         log(f'Exporting "{name}"...')
         copy(location, os.path.join(export_path_save, name))
 
-    konsave_config_export = konsave_config["export"]
+    config_export = config["export"]
     export_path_export = mkdir(os.path.join(export_path, "export"))
-    for name in konsave_config_export:
-        location, entries = section_entries(konsave_config_export[name])
+    for name in config_export:
+        location, entries = section_entries(config_export[name])
         path = mkdir(os.path.join(export_path_export, name))
         for entry in entries:
             source = os.path.join(location, entry)
@@ -304,7 +304,7 @@ def export(
     archive_name: str | None,
     force: bool,
 ) -> None:
-    """It will export the specified profile as a ".knsv" to the specified directory.
+    """It will export the specified profile as a ".dpf" to the specified directory.
        If there is no specified directory, the directory is set to the current working directory.
 
     Args:
@@ -332,7 +332,7 @@ def export(
     # Appends date and time to create a unique file name
     if not force:
         while True:
-            paths = [f"{export_path}", f"{export_path}.knsv", f"{export_path}.zip"]
+            paths = [f"{export_path}", f"{export_path}.dpf", f"{export_path}.zip"]
             if any(os.path.exists(path) for path in paths):
                 time = f"f{datetime.now():%d-%m-%Y:%H-%M-%S}"
                 export_path = f"{export_path}_{time}"
@@ -360,11 +360,11 @@ def import_profile(path: str) -> None:
     """This will import an exported profile.
 
     Args:
-        path: path of the `.knsv` file
+        path: path of the `.dpf` file
     """
 
     # assert
-    assert is_zipfile(path) and path[-5:] == EXPORT_EXTENSION, "Not a valid konsave file"
+    assert is_zipfile(path) and path[-5:] == EXPORT_EXTENSION, "Not a valid dot-profiles file"
     item = os.path.basename(path)[:-5]
     assert not os.path.exists(os.path.join(PROFILES_DIR, item)), "A profile with this name already exists"
 
@@ -373,20 +373,20 @@ def import_profile(path: str) -> None:
 
     item = os.path.basename(path).replace(EXPORT_EXTENSION, "")
 
-    temp_path = os.path.join(KONSAVE_DIR, "temp", item)
+    temp_path = os.path.join(DOT_PROFILES_DIR, "temp", item)
 
     with ZipFile(path, "r") as zip_file:
         zip_file.extractall(temp_path)
 
     config_file_location = os.path.join(temp_path, "conf.yaml")
-    konsave_config = read_konsave_config(config_file_location)
+    config = read_config(config_file_location)
 
     profile_dir = os.path.join(PROFILES_DIR, item)
     copy(os.path.join(temp_path, "save"), profile_dir)
     shutil.copy(os.path.join(temp_path, "conf.yaml"), profile_dir)
 
-    for section in konsave_config["export"]:
-        location, entries = section_entries(konsave_config["export"][section])
+    for section in config["export"]:
+        location, entries = section_entries(config["export"][section])
         path = os.path.join(temp_path, "export", section)
         mkdir(path)
         for entry in entries:

@@ -1,4 +1,4 @@
-"""Konsave entry point."""
+"""dot-profiles entry point."""
 
 from __future__ import annotations
 
@@ -25,9 +25,9 @@ def _get_parser() -> argparse.ArgumentParser:
         argparse.ArgumentParser: Created parser.
     """
     parser = argparse.ArgumentParser(
-        prog="Konsave",
+        prog="dot-profiles",
         description="A simple and powerful utility for managing your dotfiles.",
-        epilog="Please report bugs at https://www.github.com/arpanrec/konsave",
+        epilog="Please report bugs at https://www.github.com/arpanrec/dot-profiles",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False,
     )
@@ -77,14 +77,14 @@ def _get_parser() -> argparse.ArgumentParser:
         "-e",
         "--export-profile",
         type=str,
-        help="Export a profile as a shareable .knsv archive file",
+        help="Export a profile as a shareable .dpf archive file",
         metavar="<name>",
     )
     transfer_group.add_argument(
         "-i",
         "--import-profile",
         type=str,
-        help="Import a profile from a .knsv archive file",
+        help="Import a profile from a .dpf archive file",
         metavar="<path>",
     )
 
@@ -116,7 +116,7 @@ def _get_parser() -> argparse.ArgumentParser:
         "-v",
         "--version",
         action="store_true",
-        help="Display the current version of Konsave",
+        help="Display the current version of dot-profiles",
     )
 
     return parser
@@ -148,7 +148,7 @@ def main() -> None:
     elif args.import_profile:
         import_profile(args.import_profile)
     elif args.version:
-        print(f"Konsave: {VERSION}")
+        print(f"dot-profiles: {VERSION}")
     elif args.wipe:
         wipe()
     else:

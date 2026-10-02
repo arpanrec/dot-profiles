@@ -1,5 +1,5 @@
 module.exports = {
-    branches: ['main'],
+    branches: ['master'],
     tagFormat: '${version}',
     plugins: [
         [
@@ -29,13 +29,14 @@ module.exports = {
                 prepareCmd: [
                     'uv version ${nextRelease.version}',
                     'uv export --format requirements.txt --no-hashes -o requirements.txt',
-                    'uv export --format requirements.txt --no-hashes --extra dev -o requirements-dev.txt',
+                    'uv export --format requirements.txt --no-hashes --group dev -o requirements-dev.txt',
                     'uv build',
                     `uv publish --index test-pypi --token ${process.env.PYPI_TEST_API_TOKEN}`,
                 ].join(' && '),
                 successCmd: `uv publish --index pypi --token ${process.env.PYPI_PROD_API_TOKEN}`,
             },
         ],
+        '@semantic-release/github',
         [
             '@semantic-release/changelog',
             {

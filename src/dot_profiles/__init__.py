@@ -1,4 +1,4 @@
-"""Top-level Konsave package."""
+"""Top-level dot-profiles package."""
 
 from __future__ import annotations
 

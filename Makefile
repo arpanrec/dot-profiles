@@ -6,7 +6,7 @@ YAML_FILES = $$(git ls-files '*.yaml' '*.yml' '.yamllint')
 all: setup
 
 help:
-	@echo "konsave helper:"
+	@echo "dot-profiles helper:"
 	@echo ""
 	@echo " - setup:        Install dependencies and dev tools with uv"
 	@echo " - build:        Build sdist and wheel with uv"

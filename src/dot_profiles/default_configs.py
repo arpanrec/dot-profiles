@@ -5,10 +5,10 @@ Default ``conf.yaml`` contents written on first run.
 from __future__ import annotations
 
 CONF_KDE = """---
-# This is the configuration file for konsave.
+# This is the configuration file for dot-profiles.
 # This file is pre-configured for KDE Plasma users.
 # This will backup all the important files for your Plasma customizations.
-# Please make sure it follows the correct format for proper working of Konsave.
+# Please make sure it follows the correct format for proper working of dot-profiles.
 # The format should be:
 # ---
 # save:
@@ -147,8 +147,8 @@ export:
 """
 
 CONF_OTHER = """---
-# This is the configuration file for konsave.
-# Please make sure it follows the correct format for proper working of konsave.
+# This is the configuration file for dot-profiles.
+# Please make sure it follows the correct format for proper working of dot-profiles.
 # The format should be:
 # ---
 # save:
@@ -172,7 +172,7 @@ CONF_OTHER = """---
 # $HOME: the home directory
 # $PROFILES_DIR: directory where all profiles are saved
 # $CONFIG_DIR: refers to "$HOME/.config/"
-# $KONSAVE_DIR: the location where all Konsave files are stored ("$CONFIG_DIR/konsave").
+# $DOT_PROFILES_DIR: the location where all dot-profiles files are stored ("$CONFIG_DIR/dot-profiles").
 # ${ENDS_WITH="text"}: for folders with different names on different computers but their names end with the same thing.
 # The best example for this is the ".default-release" folder for firefox.
 # ${BEGINS_WITH="text"}: for folders with different names on different computers but their names start with the same

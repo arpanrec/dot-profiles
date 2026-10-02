@@ -9,7 +9,7 @@ import re
 from collections.abc import Callable
 from typing import Any
 
-from .consts import BIN_DIR, CONFIG_DIR, HOME, SHARE_DIR
+from .consts import BIN_DIR, CONFIG_DIR, DOT_PROFILES_DIR, HOME, PROFILES_DIR, SHARE_DIR
 
 
 def _find_directory(grouped_regex: str, path: str, matches: Callable[[str, str], bool]) -> str:
@@ -109,6 +109,8 @@ tokens: dict[str, Any] = {
             "CONFIG_DIR": CONFIG_DIR,
             "SHARE_DIR": SHARE_DIR,
             "BIN_DIR": BIN_DIR,
+            "PROFILES_DIR": PROFILES_DIR,
+            "DOT_PROFILES_DIR": DOT_PROFILES_DIR,
         }
     },
     "functions": {
