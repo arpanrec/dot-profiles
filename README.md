@@ -148,6 +148,10 @@ save:
 
 Please read [CONTRIBUTION.md](https://github.com/arpanrec/dot-profiles/blob/master/CONTRIBUTION.md) for info about contributing.
 
+## AI disclosure
+
+AI tools helped write parts of this project's code and documentation. The maintainer reviews the changes before they are merged.
+
 ## Acknowledgements
 
 dot-profiles started as a fork of [Konsave](https://github.com/Prayag2/konsave) by Prayag Jain.
