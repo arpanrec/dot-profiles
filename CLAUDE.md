@@ -18,13 +18,13 @@ uv run pyright
 npx --yes prettier --check .   # md/yaml/json/etc. (config: .prettierrc.mjs)
 ```
 
-CI (`.github/workflows/lint.yml`) runs mypy, pylint, isort, black, ruff, pyright, yamllint and prettier. Line length is 120; mypy/pyright are strict, so new code needs full type hints (existing code is largely untyped and does not pass these yet). There is no test suite.
+CI (`.github/workflows/lint.yml`) runs mypy, pylint, isort, black, ruff, pyright, yamllint and prettier. Line length is 120; mypy/pyright are strict, so all code needs full type hints. There is no test suite.
 
 ## Architecture
 
 Konsave saves/applies desktop "profiles" (dotfile snapshots) from `~/.config/konsave/`. All code is in `src/konsave/`:
 
-- `__main__.py` — argparse CLI (`main()` is the `konsave` script entry point). On first run it copies `conf_kde.yaml` (if `$XDG_CURRENT_DESKTOP == KDE`) or `conf_other.yaml` to `~/.config/konsave/conf.yaml`, then dispatches to `funcs`.
+- `__main__.py` — argparse CLI (`main()` is the `konsave` script entry point). On first run it writes `CONF_KDE` (if `$XDG_CURRENT_DESKTOP == KDE`) or `CONF_OTHER` from `default_configs.py` to `~/.config/konsave/conf.yaml`, then dispatches to `funcs`.
 - `consts.py` — path constants and **import-time side effects**: creates `~/.config/konsave/profiles` and snapshots `list_of_profiles` / `length_of_lop` once at import. These values are passed into `funcs` functions, so they go stale within a single process after a save/remove.
 - `funcs.py` — profile operations (save, apply, remove, export, import, wipe) plus `read_konsave_config`, which loads `conf.yaml` and runs it through the `parse` module. Public functions are wrapped with `@exception_handler`.
 - `parse.py` — expands placeholders in each entry's `location` in `conf.yaml`: keywords (`$HOME`, `$CONFIG_DIR`, `$SHARE_DIR`, `$BIN_DIR`) and functions (`${ENDS_WITH="x"}`, `${BEGINS_WITH="x"}`, which resolve a directory name by listing the parent directory). The token tables (`tokens`, `TOKEN_SYMBOL`) are imported by `funcs.py`.

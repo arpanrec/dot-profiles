@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import argparse
 import os
-import shutil
-from importlib.resources import files
 
 from .consts import CONFIG_FILE, VERSION, length_of_lop, list_of_profiles
+from .default_configs import CONF_KDE, CONF_OTHER
 from .funcs import (
     apply_profile,
     export,
@@ -127,12 +126,9 @@ def main() -> None:
     """The main function that handles all the arguments and options."""
 
     if not os.path.exists(CONFIG_FILE):
-        if os.path.expandvars("$XDG_CURRENT_DESKTOP") == "KDE":
-            default_config_path = str(files("konsave") / "conf_kde.yaml")
-            shutil.copy(default_config_path, CONFIG_FILE)
-        else:
-            default_config_path = str(files("konsave") / "conf_other.yaml")
-            shutil.copy(default_config_path, CONFIG_FILE)
+        default_config = CONF_KDE if os.path.expandvars("$XDG_CURRENT_DESKTOP") == "KDE" else CONF_OTHER
+        with open(CONFIG_FILE, "w", encoding="utf-8") as config_file:
+            config_file.write(default_config)
 
     parser = _get_parser()
     args = parser.parse_args()
