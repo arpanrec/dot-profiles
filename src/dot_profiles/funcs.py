@@ -111,13 +111,14 @@ def copy(source: str, dest: str) -> None:
 
 
 def copy_entry(source: str, dest: str) -> None:
-    """Copies a file or folder to "dest" if "source" exists.
+    """Copies a file or folder to "dest" if "source" exists, creating the parent folders of "dest".
 
     Args:
         source: the file or folder to copy
         dest: the destination of the copy
     """
     if os.path.exists(source):
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
         if os.path.isdir(source):
             copy(source, dest)
         else:
