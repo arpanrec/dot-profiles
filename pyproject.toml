@@ -41,9 +41,16 @@ required-version = ">=0.12.8,<1.0"
 system-certs = true
 
 [[tool.uv.index]]
+name = "test-pypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[[tool.uv.index]]
 default = true
-name = "pypi_remote"
+name = "pypi"
 url = "https://pypi.org/simple/"
+publish-url = "https://upload.pypi.org/legacy/"
 
 [tool.black]
 line-length = 120
