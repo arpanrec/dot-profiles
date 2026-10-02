@@ -151,7 +151,7 @@ save:
 
 ## Contributing
 
-Please read [CONTRIBUTION.md](https://github.com/Prayag2/konsave/blob/master/CONTRIBUTION.md) for info about contributing.
+Please read [CONTRIBUTION.md](https://github.com/arpanrec/konsave/blob/master/CONTRIBUTION.md) for info about contributing.
 
 ## License
 
