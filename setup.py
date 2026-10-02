@@ -49,12 +49,5 @@ setup(
     python_requires=">=3.6",
     install_requires=_REQUIREMENTS,
     extras_require={"dev": _REQUIREMENTS_DEV},
-    classifiers=[
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-        "Operating System :: POSIX",
-        "Environment :: Console",
-        "Intended Audience :: End Users/Desktop",
-        "Programming Language :: Python",
-    ],
     entry_points={"console_scripts": ["konsave = konsave.__main__:main"]},
 )

@@ -1,0 +1,100 @@
+[project]
+name = "konsave"
+version = "0.1.0"
+description = "A program that lets you save your Plasma configuration in an instant!"
+readme = "README.md"
+authors = [
+    { name = "arpan", email = "me@arpanrec.com" },
+    { name = "Prayag Jain", email = "prayagjain2@gmail.com" },
+]
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+dependencies = ["pyyaml>=6.0.3"]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: POSIX",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python",
+]
+[project.scripts]
+konsave = "konsave.__main__:main"
+
+[dependency-groups]
+dev = [
+    "yamllint==1.38.0",
+    "black==26.5.1",
+    "isort==9.0.1",
+    "mypy==2.3.1",
+    "pylint==4.0.9",
+    "pyright==1.1.414",
+    "ruff==0.16.9",
+]
+
+[build-system]
+build-backend = "uv_build"
+requires = ["uv_build>=0.12.8,<1.0"]
+
+[tool.uv]
+link-mode = "clone"
+package = true
+required-version = ">=0.12.8,<1.0"
+system-certs = true
+
+[[tool.uv.index]]
+default = true
+name = "pypi_remote"
+url = "http://10.8.33.190:5502/root/pypi/+simple/"
+
+[tool.black]
+line-length = 120
+target-version = ["py314"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP", "SIM", "C4"]
+
+[tool.mypy]
+python_version = "3.14"
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+exclude = ["^.venv/.*"]
+
+[tool.pyright]
+include = ["src"]
+pythonVersion = "3.14"
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "strict"
+
+[tool.pylint.main]
+py-version = "3.14"
+jobs = 0
+ignore-paths = ["^\\.venv/.*"]
+ignore = [".venv"]
+
+[tool.pylint.format]
+max-line-length = 120
+indent-string = "    "
+
+[tool.pylint.design]
+max-args = 8
+max-positional-arguments = 8
+max-locals = 20
+max-returns = 8
+
+[tool.pylint."messages control"]
+disable = ["duplicate-code", "W0511"]
