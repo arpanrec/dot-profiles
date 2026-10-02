@@ -6,7 +6,7 @@
 # save:
 #     name:
 #         location: "path/to/parent/directory"
-#         entries: 
+#         entries:
 #         # these are files to be backed up. They should be present in the specified location.
 #             - file1
 #             - file2
@@ -16,7 +16,7 @@
 #     # These may include files like complete icon packs and themes..
 #     name:
 #         location: "path/to/parent/directory"
-#         entries: 
+#         entries:
 #             - file1
 #             - file2
 # ...
@@ -50,7 +50,6 @@ save:
     #     entries:
     #         - settings.json
 
-
 # The following files will only be used for exporting and importing.
 export:
     share_folder:
@@ -61,13 +60,13 @@ export:
         location: "$HOME/"
         entries:
             # add files/folders to export from the home directory here
-    
+
     # You can add more files to export like this
     # name:
-        # location: "path"
-        # entries:
-            # - file1
-            # - file2
-            # - folder1
-            # - folder2
+    # location: "path"
+    # entries:
+    # - file1
+    # - file2
+    # - folder1
+    # - folder2
 ...

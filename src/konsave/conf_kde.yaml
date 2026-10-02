@@ -8,8 +8,8 @@
 # save:
 #     name:
 #         location: "path/to/parent/directory"
-#         entries: 
-#         # these are files which will be backed up. 
+#         entries:
+#         # these are files which will be backed up.
 #         # They should be present in the specified location.
 #             - file1
 #             - file2
@@ -19,7 +19,7 @@
 #     # These may include files like complete icon packs and themes..
 #     name:
 #         location: "path/to/parent/directory"
-#         entries: 
+#         entries:
 #             - file1
 #             - file2
 # ...
@@ -67,9 +67,9 @@ save:
             - khotkeysrc
             # Added for Plasma 6.x compatibility (optional/extra configs)
             - systemsettingsrc
-            - kded5rc               # renamed from kdedrc (Plasma 6)
+            - kded5rc # renamed from kdedrc (Plasma 6)
             - kconf_updaterc
-            - kscreenrc            # include if persistent on your system
+            - kscreenrc # include if persistent on your system
             - plasma-systemmonitorrc
             - spectaclerc
             - plasmanotifyrc
@@ -107,7 +107,6 @@ save:
     #     entries:
     #         - settings.json
 
-
 # The following files will only be used for exporting and importing.
 export:
     share_folder:
@@ -129,8 +128,7 @@ export:
             - .fonts
             - .themes
             - .icons
-    
-        
+
     # You can add more files to export like this
     # name:
     #     location: "path/to/parent/directory"
