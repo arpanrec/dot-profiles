@@ -28,8 +28,8 @@ module.exports = {
             {
                 prepareCmd: [
                     'uv version ${nextRelease.version}',
-                    'uv export --format requirements.txt --no-hashes -o requirements.txt',
-                    'uv export --format requirements.txt --no-hashes --group dev -o requirements-dev.txt',
+                    'uv export --format requirements.txt --no-hashes --no-annotate --no-header --no-progress -o requirements.txt',
+                    'uv export --format requirements.txt --no-hashes --no-annotate --no-header --no-progress --group dev -o requirements-dev.txt',
                     'uv build',
                     'uv run typer src/dot_profiles/__main__.py utils docs --output docs/cli.md',
                     `uv publish --index test-pypi --token ${process.env.PYPI_TEST_API_TOKEN}`,
