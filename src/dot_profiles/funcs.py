@@ -78,7 +78,7 @@ def log(msg: str, *args: Any, **kwargs: Any) -> None:
 
 
 @exception_handler
-def copy(source: str, dest: str) -> None:
+def copy(source: str, dest: str, skip_own_dir: bool = False) -> None:
     """
     This function was created because shutil.copytree gives error if the destination folder
     exists and the argument "dirs_exist_ok" was introduced only after python 3.8.
@@ -89,6 +89,7 @@ def copy(source: str, dest: str) -> None:
     Args:
         source: the source destination
         dest: the destination to copy the file/folder to
+        skip_own_dir: leave out anything inside the dot-profiles config directory
     """
     assert isinstance(source, str) and isinstance(dest, str), "Invalid path"
     assert source != dest, "Source and destination can't be same"
@@ -101,8 +102,11 @@ def copy(source: str, dest: str) -> None:
         source_path = os.path.join(source, item)
         dest_path = os.path.join(dest, item)
 
+        if skip_own_dir and is_in_own_dir(source_path):
+            continue
+
         if os.path.isdir(source_path):
-            copy(source_path, dest_path)
+            copy(source_path, dest_path, skip_own_dir)
         else:
             if os.path.exists(dest_path):
                 os.remove(dest_path)
@@ -110,17 +114,18 @@ def copy(source: str, dest: str) -> None:
                 shutil.copy(source_path, dest)
 
 
-def copy_entry(source: str, dest: str) -> None:
+def copy_entry(source: str, dest: str, skip_own_dir: bool = False) -> None:
     """Copies a file or folder to "dest" if "source" exists, creating the parent folders of "dest".
 
     Args:
         source: the file or folder to copy
         dest: the destination of the copy
+        skip_own_dir: leave out anything inside the dot-profiles config directory
     """
     if os.path.exists(source):
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         if os.path.isdir(source):
-            copy(source, dest)
+            copy(source, dest, skip_own_dir)
         else:
             shutil.copy(source, dest)
 
@@ -142,7 +147,38 @@ def read_config(config_file: str) -> Config:
         raise ValueError(f"Invalid configuration file {config_file}:\n{err}") from err
     parse_keywords(tokens, TOKEN_SYMBOL, config)
     parse_functions(tokens, TOKEN_SYMBOL, config)
+    exclude_own_dir(config)
     return config
+
+
+def is_in_own_dir(path: str) -> bool:
+    """Checks whether a path is the dot-profiles config directory or lies inside it.
+
+    Args:
+        path: the path to check
+    """
+    own_dir = os.path.realpath(DOT_PROFILES_DIR)
+    path = os.path.realpath(path)
+    return path == own_dir or path.startswith(own_dir + os.sep)
+
+
+def exclude_own_dir(config: Config) -> None:
+    """Removes every entry that points into the dot-profiles config directory from "save" and "export".
+
+    Args:
+        config: the validated and expanded configuration, modified in place
+    """
+    for section in config.sections():
+        for name in list(section):
+            section_config = section[name]
+            if is_in_own_dir(section_config.location):
+                del section[name]
+                continue
+            section_config.entries = [
+                entry
+                for entry in section_config.entries
+                if not is_in_own_dir(os.path.join(section_config.location, entry))
+            ]
 
 
 @exception_handler
@@ -193,7 +229,7 @@ def save_profile(name: str, profile_list: list[str], force: bool = False) -> Non
         for entry in section_config.entries:
             source = os.path.join(section_config.location, entry)
             dest = os.path.join(folder, entry)
-            copy_entry(source, dest)
+            copy_entry(source, dest, skip_own_dir=True)
 
     shutil.copy(CONFIG_FILE, profile_dir)
 
@@ -271,7 +307,7 @@ def stage_export(profile_dir: str, export_path: str) -> None:
             source = os.path.join(section_config.location, entry)
             dest = os.path.join(path, entry)
             log(f'Exporting "{entry}"...')
-            copy_entry(source, dest)
+            copy_entry(source, dest, skip_own_dir=True)
 
 
 @exception_handler
