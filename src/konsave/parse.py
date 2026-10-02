@@ -1,44 +1,61 @@
 """
 This module parses conf.yaml
 """
+
+from __future__ import annotations
+
 import os
 import re
-from konsave.consts import HOME, CONFIG_DIR, SHARE_DIR, BIN_DIR
+from collections.abc import Callable
+from typing import Any
+
+from .consts import BIN_DIR, CONFIG_DIR, HOME, SHARE_DIR
 
 
-def ends_with(grouped_regex, path) -> str:
+def _find_directory(grouped_regex: str, path: str, matches: Callable[[str, str], bool]) -> str:
+    """Finds the first folder whose name satisfies `matches` against the text in the regex's second group.
+
+    Args:
+        grouped_regex: regex of the function
+        path: path
+        matches: predicate taking a directory name and the text to compare it with
+    """
+    found = re.search(grouped_regex, path)
+    if found is None:
+        return path
+    occurence = found.group()
+    dirs = os.listdir(path[0 : path.find(occurence)])
+    inner = re.search(grouped_regex, occurence)
+    if inner is None:
+        return occurence
+    text = inner.group(2)
+    for directory in dirs:
+        if matches(directory, text):
+            return path.replace(occurence, directory)
+    return occurence
+
+
+def ends_with(grouped_regex: str, path: str) -> str:
     """Finds folder with name ending with the provided string.
 
     Args:
         grouped_regex: regex of the function
         path: path
     """
-    occurence = re.search(grouped_regex, path).group()
-    dirs = os.listdir(path[0 : path.find(occurence)])
-    ends_with_text = re.search(grouped_regex, occurence).group(2)
-    for directory in dirs:
-        if directory.endswith(ends_with_text):
-            return path.replace(occurence, directory)
-    return occurence
+    return _find_directory(grouped_regex, path, str.endswith)
 
 
-def begins_with(grouped_regex, path) -> str:
+def begins_with(grouped_regex: str, path: str) -> str:
     """Finds folder with name beginning with the provided string.
 
     Args:
         grouped_regex: regex of the function
         path: path
     """
-    occurence = re.search(grouped_regex, path).group()
-    dirs = os.listdir(path[0 : path.find(occurence)])
-    ends_with_text = re.search(grouped_regex, occurence).group(2)
-    for directory in dirs:
-        if directory.startswith(ends_with_text):
-            return path.replace(occurence, directory)
-    return occurence
+    return _find_directory(grouped_regex, path, str.startswith)
 
 
-def parse_keywords(tokens_, token_symbol, parsed):
+def parse_keywords(tokens_: dict[str, Any], token_symbol: str, parsed: dict[str, Any]) -> None:
     """Replaces keywords with values in conf.yaml. For example, it will replace, $HOME with
     /home/username/
 
@@ -56,7 +73,7 @@ def parse_keywords(tokens_, token_symbol, parsed):
                     parsed[item][name]["location"] = location.replace(word, value)
 
 
-def parse_functions(tokens_, token_symbol, parsed):
+def parse_functions(tokens_: dict[str, Any], token_symbol: str, parsed: dict[str, Any]) -> None:
     """Replaces functions with values in conf.yaml. For example, it will replace,
     ${ENDS_WITH='text'} with a folder whose name ends with "text"
 
@@ -76,15 +93,16 @@ def parse_functions(tokens_, token_symbol, parsed):
             if not occurences:
                 continue
             for occurence in occurences:
-                func = re.search(grouped_regex, occurence).group(1)
+                found = re.search(grouped_regex, occurence)
+                if found is None:
+                    continue
+                func = found.group(1)
                 if func in functions["dict"]:
-                    parsed[item][name]["location"] = functions["dict"][func](
-                        grouped_regex, location
-                    )
+                    parsed[item][name]["location"] = functions["dict"][func](grouped_regex, location)
 
 
 TOKEN_SYMBOL = "$"
-tokens = {
+tokens: dict[str, Any] = {
     "keywords": {
         "dict": {
             "HOME": HOME,

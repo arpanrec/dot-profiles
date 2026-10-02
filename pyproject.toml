@@ -84,6 +84,7 @@ py-version = "3.14"
 jobs = 0
 ignore-paths = ["^\\.venv/.*"]
 ignore = [".venv"]
+good-names = ["i", "j", "k", "v", "ex", "_", "pk", "x", "y"]
 
 [tool.pylint.format]
 max-line-length = 120
@@ -96,4 +97,4 @@ max-locals = 20
 max-returns = 8
 
 [tool.pylint."messages control"]
-disable = ["duplicate-code", "W0511"]
+disable = ["duplicate-code", "W0511", "broad-exception-caught", "too-many-branches"]

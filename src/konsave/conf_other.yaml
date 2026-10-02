@@ -27,7 +27,8 @@
 # $KONSAVE_DIR: the location where all Konsave files are stored ("$CONFIG_DIR/konsave").
 # ${ENDS_WITH="text"}: for folders with different names on different computers but their names end with the same thing.
 # The best example for this is the ".default-release" folder for firefox.
-# ${BEGINS_WITH="text"}: for folders with different names on different computers but their names start with the same thing.
+# ${BEGINS_WITH="text"}: for folders with different names on different computers but their names start with the same
+# thing.
 
 # The following files will be saved in your profiles
 save:

@@ -1,9 +1,12 @@
 """
 This module contains all the variables for konsave
 """
-import os
-from konsave import __version__
 
+from __future__ import annotations
+
+import os
+
+from . import __version__
 
 HOME = os.path.expandvars("$HOME")
 CONFIG_DIR = os.path.join(HOME, ".config")

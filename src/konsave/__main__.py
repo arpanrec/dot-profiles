@@ -1,17 +1,14 @@
 """Konsave entry point."""
 
+from __future__ import annotations
+
 import argparse
 import os
 import shutil
 from importlib.resources import files
 
-from konsave.consts import (
-    CONFIG_FILE,
-    VERSION,
-    length_of_lop,
-    list_of_profiles,
-)
-from konsave.funcs import (
+from .consts import CONFIG_FILE, VERSION, length_of_lop, list_of_profiles
+from .funcs import (
     apply_profile,
     export,
     import_profile,
@@ -37,34 +34,37 @@ def _get_parser() -> argparse.ArgumentParser:
     )
 
     # Profile Management Group
-    profile_group = parser.add_argument_group(
-        "Profile Management", "Commands for managing configuration profiles"
-    )
+    profile_group = parser.add_argument_group("Profile Management", "Commands for managing configuration profiles")
     profile_group.add_argument(
-        "-l", "--list",
+        "-l",
+        "--list",
         action="store_true",
         help="List all saved profiles",
     )
     profile_group.add_argument(
-        "-s", "--save",
+        "-s",
+        "--save",
         type=str,
         help="Save current configuration as a new profile",
         metavar="<name>",
     )
     profile_group.add_argument(
-        "-a", "--apply",
+        "-a",
+        "--apply",
         type=str,
         help="Apply a saved profile to restore its configuration",
         metavar="<name>",
     )
     profile_group.add_argument(
-        "-r", "--remove",
+        "-r",
+        "--remove",
         type=str,
         help="Delete a saved profile permanently",
         metavar="<name>",
     )
     profile_group.add_argument(
-        "-w", "--wipe",
+        "-w",
+        "--wipe",
         action="store_true",
         help="Delete all saved profiles (use with caution!)",
     )
@@ -75,45 +75,47 @@ def _get_parser() -> argparse.ArgumentParser:
         "Commands for sharing profiles with others",
     )
     transfer_group.add_argument(
-        "-e", "--export-profile",
+        "-e",
+        "--export-profile",
         type=str,
         help="Export a profile as a shareable .knsv archive file",
         metavar="<name>",
     )
     transfer_group.add_argument(
-        "-i", "--import-profile",
+        "-i",
+        "--import-profile",
         type=str,
         help="Import a profile from a .knsv archive file",
         metavar="<path>",
     )
 
     # Options Group
-    options_group = parser.add_argument_group(
-        "Options", "Additional options to modify command behavior"
-    )
+    options_group = parser.add_argument_group("Options", "Additional options to modify command behavior")
     options_group.add_argument(
-        "-f", "--force",
+        "-f",
+        "--force",
         action="store_true",
         help="Force overwrite when saving/exporting (skip confirmation prompts)",
     )
     options_group.add_argument(
-        "-d", "--export-directory",
+        "-d",
+        "--export-directory",
         help="Specify custom directory for exported profile (default: current directory)",
         metavar="<directory>",
     )
     options_group.add_argument(
-        "-n", "--export-name",
+        "-n",
+        "--export-name",
         help="Specify custom filename for exported profile archive",
         metavar="<archive-name>",
     )
 
     # Miscellaneous Group
     misc_group = parser.add_argument_group("Miscellaneous", "Other utility commands")
+    misc_group.add_argument("-h", "--help", action="help", help="Show this help message and exit")
     misc_group.add_argument(
-        "-h", "--help", action="help", help="Show this help message and exit"
-    )
-    misc_group.add_argument(
-        "-v", "--version",
+        "-v",
+        "--version",
         action="store_true",
         help="Display the current version of Konsave",
     )
@@ -121,7 +123,7 @@ def _get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     """The main function that handles all the arguments and options."""
 
     if not os.path.exists(CONFIG_FILE):
@@ -144,8 +146,9 @@ def main():
     elif args.apply:
         apply_profile(args.apply, list_of_profiles, length_of_lop)
     elif args.export_profile:
-        export(args.export_profile, list_of_profiles, length_of_lop,
-               args.export_directory, args.export_name, args.force)
+        export(
+            args.export_profile, list_of_profiles, length_of_lop, args.export_directory, args.export_name, args.force
+        )
     elif args.import_profile:
         import_profile(args.import_profile)
     elif args.version:

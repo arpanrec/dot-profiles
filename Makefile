@@ -1,61 +1,88 @@
-.PHONY: help all setup dev-setup fmt clean distclean maintclean pyfmt black usort tests
+.PHONY: help all setup build lint fmt mypy pylint isort black ruff pyright yamllint prettier clean distclean maintclean
+
+PY_FILES = $$(git ls-files '*.py')
+YAML_FILES = $$(git ls-files '*.yaml' '*.yml' '.yamllint')
 
 all: setup
 
 help:
-		@echo "konsave helper:"
-		@echo ""
-		@echo " - setup:        User-level setup"
-		@echo " - dev-setup:    Development setup"
-		@echo " - fmt:          Format the code with pyfmt"
-		@echo " - clean:        Remove all pyc files"
-		@echo " - distclean:    Remove any eggs/builds"
-		@echo " - maintclean:   Remove virtual env and dist files"
-		@echo ""
+	@echo "konsave helper:"
+	@echo ""
+	@echo " - setup:        Install dependencies and dev tools with uv"
+	@echo " - build:        Build sdist and wheel with uv"
+	@echo " - lint:         Run all linters (same checks as CI)"
+	@echo " - fmt:          Apply isort, black, ruff fixes and prettier"
+	@echo " - mypy:         Run mypy"
+	@echo " - pylint:       Run pylint"
+	@echo " - isort:        Check import order"
+	@echo " - black:        Check formatting"
+	@echo " - ruff:         Run ruff check"
+	@echo " - pyright:      Run pyright"
+	@echo " - yamllint:     Run yamllint"
+	@echo " - prettier:     Check prettier formatting"
+	@echo " - clean:        Remove all pyc files"
+	@echo " - distclean:    Remove any eggs/builds"
+	@echo " - maintclean:   Remove virtual env and dist files"
+	@echo ""
 
 setup:
-		@echo "Setting Up (user)"
-		@python3 -m venv .venv
-		@(. .venv/bin/activate && \
-				pip install -r requirements.txt && \
-				python -m pip install --upgrade pip \
-		)
+	@echo "Setting up"
+	@uv sync --all-extras --all-packages
 
-dev-setup: setup
-		@echo "Setting Up (dev)"
-		@@(. .venv/bin/activate && pip install -r requirements_dev.txt)
+build:
+	@echo " * Building"
+	@uv build
 
+lint: mypy pylint isort black ruff pyright yamllint prettier
 
-fmt: black pylint
+fmt:
+	@echo " * Running isort"
+	@uv run isort $(PY_FILES)
+	@echo " * Running black"
+	@uv run black $(PY_FILES)
+	@echo " * Running ruff --fix"
+	@uv run ruff check --fix $(PY_FILES)
+	@echo " * Running prettier"
+	@npx --yes prettier --write .
 
-black:
-		@echo " * Running black"
-		@black --safe konsave
-
-
-# TODO: Consider adding this
-# usort:
-# 		@echo " * Running usort"
-# 		@usort format konsave
+mypy:
+	@echo " * Running mypy"
+	@uv run mypy $(PY_FILES)
 
 pylint:
-		@echo " * Running pylint"
-		@pylint konsave
+	@echo " * Running pylint"
+	@uv run pylint $(PY_FILES)
+
+isort:
+	@echo " * Running isort"
+	@uv run isort --check-only $(PY_FILES)
+
+black:
+	@echo " * Running black"
+	@uv run black --check $(PY_FILES)
+
+ruff:
+	@echo " * Running ruff"
+	@uv run ruff check $(PY_FILES)
+
+pyright:
+	@echo " * Running pyright"
+	@uv run pyright
+
+yamllint:
+	@echo " * Running yamllint"
+	@uv run yamllint $(YAML_FILES)
+
+prettier:
+	@echo " * Running prettier"
+	@npx --yes prettier --check .
 
 clean:
-		@find . -name "*.pyc" -exec rm -f {} \;
-		@find . -name '__pycache__' -type d | xargs rm -fr
+	@find . -path ./.venv -prune -o -name "*.pyc" -exec rm -f {} \;
+	@find . -path ./.venv -prune -o -name '__pycache__' -type d -exec rm -fr {} +
 
 distclean: clean
-		rm -fr *.egg *.egg-info/ .eggs/ dist/ build/
+	rm -fr *.egg *.egg-info/ .eggs/ dist/ build/
 
 maintclean: distclean
-		rm -fr .venv/
-
-# TODO: Consider adding proper type-checking
-# typecheck:
-#		 mypy -p yacgtc --strict --no-strict-optional --ignore-missing-imports --install-types
-#		 mypy -p tests --no-strict-optional --ignore-missing-imports --install-types
-
-tests:
-		python3 ./test.py
+	rm -fr .venv/
