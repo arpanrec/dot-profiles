@@ -1,11 +1,10 @@
 [project]
-name = "konsave"
+name = "dot-profiles"
 version = "0.1.0"
 description = "A program that lets you save your Plasma configuration in an instant!"
 readme = "README.md"
 authors = [
     { name = "arpan", email = "me@arpanrec.com" },
-    { name = "Prayag Jain", email = "prayagjain2@gmail.com" },
 ]
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
@@ -16,8 +15,14 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "Programming Language :: Python",
 ]
+
+[project.urls]
+Homepage = "https://github.com/arpanrec/dot-profiles"
+Issues = "https://github.com/arpanrec/dot-profiles/issues"
+Repository = "https://github.com/arpanrec/dot-profiles"
+
 [project.scripts]
-konsave = "konsave.__main__:main"
+dot-profiles = "dot_profiles.__main__:main"
 
 [dependency-groups]
 dev = [

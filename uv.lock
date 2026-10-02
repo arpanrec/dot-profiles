@@ -139,6 +139,39 @@ wheels = [
 ]
 
 [[package]]
+name = "dot-profiles"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "pyyaml" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "black" },
+    { name = "isort" },
+    { name = "mypy" },
+    { name = "pylint" },
+    { name = "pyright" },
+    { name = "ruff" },
+    { name = "yamllint" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pyyaml", specifier = ">=6.0.3" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "black", specifier = "==26.5.1" },
+    { name = "isort", specifier = "==9.0.1" },
+    { name = "mypy", specifier = "==2.3.1" },
+    { name = "pylint", specifier = "==4.0.9" },
+    { name = "pyright", specifier = "==1.1.414" },
+    { name = "ruff", specifier = "==0.16.9" },
+    { name = "yamllint", specifier = "==1.38.0" },
+]
+
+[[package]]
 name = "isort"
 version = "9.0.1"
 source = { registry = "https://pypi.org/simple/" }
@@ -175,39 +208,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/34/43/f9f456c223ba34293ab28f736f00e26875b26913f24451e5a2938a8c4e02/isort-9.0.1-cp315-cp315t-musllinux_1_2_x86_64.whl", hash = "sha256:23d3b6657763f9be1b15bb9664b016abfce34849d6215a46a42af7945d4acd68", size = 1871162, upload-time = "2026-08-27T20:54:22.593Z" },
     { url = "https://files.pythonhosted.org/packages/38/5c/17fedc2bee564bb13b50ed3cb2ce7d66dd8e09184fb45d7a263ebaaaa97e/isort-9.0.1-cp315-cp315t-win_amd64.whl", hash = "sha256:8f490acc182253d07071cc8255b57a281855e2e027b929a89eaa7c797f7b213e", size = 918269, upload-time = "2026-08-27T20:54:23.996Z" },
     { url = "https://files.pythonhosted.org/packages/af/6e/4ec84f19b008864656b9f158bad006aa6346e754694aff47a7fa9ee65a19/isort-9.0.1-py3-none-any.whl", hash = "sha256:5aac7263b7a7f9f647f94fb6df2761ff5b60a7168eb492ff39dd30443207fa19", size = 103487, upload-time = "2026-08-27T20:54:25.395Z" },
-]
-
-[[package]]
-name = "konsave"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "pyyaml" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "black" },
-    { name = "isort" },
-    { name = "mypy" },
-    { name = "pylint" },
-    { name = "pyright" },
-    { name = "ruff" },
-    { name = "yamllint" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "pyyaml", specifier = ">=6.0.3" }]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "black", specifier = "==26.5.1" },
-    { name = "isort", specifier = "==9.0.1" },
-    { name = "mypy", specifier = "==2.3.1" },
-    { name = "pylint", specifier = "==4.0.9" },
-    { name = "pyright", specifier = "==1.1.414" },
-    { name = "ruff", specifier = "==0.16.9" },
-    { name = "yamllint", specifier = "==1.38.0" },
 ]
 
 [[package]]
